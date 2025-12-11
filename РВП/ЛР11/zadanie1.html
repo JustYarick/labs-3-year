@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>ЛР11. Опрос с чекбоксами</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    form {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    button {
+      background: #0066cc;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover { background: #004c99; }
+    #results {
+      max-width: 600px;
+      margin: 20px auto;
+      background: #e8ffe8;
+      border: 1px solid #8bc34a;
+      padding: 15px;
+      border-radius: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Опрос</h1>
+
+  <form id="surveyForm">
+    <div class="question">
+      <p><b>1. Какие языки программирования вы знаете?</b></p>
+      <label><input type="checkbox" name="langs" value="Python"> Python</label><br>
+      <label><input type="checkbox" name="langs" value="JavaScript"> JavaScript</label><br>
+      <label><input type="checkbox" name="langs" value="C++"> C++</label><br>
+      <label><input type="checkbox" name="langs" value="C#"> C#</label><br>
+      <label><input type="checkbox" name="langs" value="C"> C</label>
+    </div>
+
+    <div class="question">
+      <p><b>2. Какие виды спорта вам нравятся?</b></p>
+      <label><input type="checkbox" name="sports" value="Футбол"> Футбол</label><br>
+      <label><input type="checkbox" name="sports" value="Баскетбол"> Баскетбол</label><br>
+      <label><input type="checkbox" name="sports" value="Плавание"> Плавание</label><br>
+      <label><input type="checkbox" name="sports" value="Теннис"> Теннис</label>
+    </div>
+
+    <div class="question">
+      <p><b>3. Ваши любимые жанры музыки?</b></p>
+      <label><input type="checkbox" name="music" value="Рок"> Рок</label><br>
+      <label><input type="checkbox" name="music" value="Поп"> Поп</label><br>
+      <label><input type="checkbox" name="music" value="Классика"> Классика</label><br>
+      <label><input type="checkbox" name="music" value="Электронная"> Электронная</label>
+    </div>
+
+    <div align="center">
+      <button type="button" onclick="showResults()">Отправить</button>
+    </div>
+  </form>
+
+  <div id="results"></div>
+
+  <script>
+    function showResults() {
+      let form = document.getElementById("surveyForm");
+      let resultsDiv = document.getElementById("results");
+      let output = "<h2>Результаты опроса:</h2>";
+
+      let questions = ["langs", "sports", "music"];
+      let labels = ["Языки программирования", "Виды спорта", "Музыкальные жанры"];
+
+      for (let i = 0; i < questions.length; i++) {
+        let checkboxes = form.querySelectorAll("input[name='" + questions[i] + "']:checked");
+        let values = Array.from(checkboxes).map(cb => cb.value);
+        output += "<p><b>" + labels[i] + ":</b> " + (values.length ? values.join(", ") : "не выбрано") + "</p>";
+      }
+
+      resultsDiv.innerHTML = output;
+      resultsDiv.style.display = "block";
+      window.scrollTo(0, resultsDiv.offsetTop);
+    }
+  </script>
+
+</body>
+</html>

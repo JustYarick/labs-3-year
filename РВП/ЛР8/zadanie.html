@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>ЛР8. Форма регистрации с сохранением</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    h1 { text-align: center; color: #333; }
+    form {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; font-weight: bold; margin-bottom: 5px; }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    input[type="radio"] {
+      width: auto;
+      margin-right: 5px;
+    }
+    .tabs { display: flex; margin-bottom: 15px; border-bottom: 2px solid #ccc; }
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      border-bottom: none;
+      background: #eee;
+      margin-right: 5px;
+      border-radius: 5px 5px 0 0;
+    }
+    .tab.active { background: #fff; font-weight: bold; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    button {
+      background: #0066cc;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover { background: #004c99; }
+    .error { color: red; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+  <h1>Форма регистрации</h1>
+  <form id="regForm" onsubmit="return false">
+
+    <!-- Вкладки -->
+    <div class="tabs">
+      <div class="tab active" onclick="openTab(event, 'personal')">Личная информация</div>
+      <div class="tab" onclick="openTab(event, 'contact')">Контактная информация</div>
+    </div>
+
+    <!-- Личная информация -->
+    <div id="personal" class="tab-content active">
+      <div class="form-group">
+        <label for="fname">Имя:</label>
+        <input type="text" id="fname" name="fname" placeholder="Введите имя" autocomplete="given-name">
+      </div>
+      <div class="form-group">
+        <label for="lname">Фамилия:</label>
+        <input type="text" id="lname" name="lname" placeholder="Введите фамилию" autocomplete="family-name">
+      </div>
+      <div class="form-group">
+        <label>Пол:</label>
+        <input type="radio" name="gender" value="Мужской"> Мужской
+        <input type="radio" name="gender" value="Женский"> Женский
+      </div>
+    </div>
+
+    <!-- Контактная информация -->
+    <div id="contact" class="tab-content">
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="example@mail.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label for="password">Пароль:</label>
+        <input type="password" id="password" name="password" placeholder="Введите пароль" autocomplete="new-password">
+      </div>
+      <div class="form-group">
+        <label for="age">Возраст (от 18 до 100):</label>
+        <input type="number" id="age" name="age" min="18" max="100">
+      </div>
+      <div class="form-group">
+        <label for="file">Загрузите файл:</label>
+        <input type="file" id="file" name="file">
+      </div>
+      <div class="form-group">
+        <label for="hobby">Ваши увлечения:</label>
+        <select id="hobby" name="hobby" multiple size="4">
+          <option>Программирование</option>
+          <option>Спорт</option>
+          <option>Музыка</option>
+          <option>Путешествия</option>
+          <option>Чтение</option>
+        </select>
+      </div>
+    </div>
+
+    <p class="error" id="errorMsg"></p>
+
+    <div align="center">
+      <button type="button" onclick="saveToFile()">Сохранить</button>
+    </div>
+  </form>
+
+  <script>
+    // Переключение вкладок
+    function openTab(evt, tabName) {
+      let tabs = document.getElementsByClassName("tab");
+      let contents = document.getElementsByClassName("tab-content");
+      for (let i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove("active");
+        contents[i].classList.remove("active");
+      }
+      evt.currentTarget.classList.add("active");
+      document.getElementById(tabName).classList.add("active");
+    }
+
+    // Валидация и сохранение в файл
+    function saveToFile() {
+      let fname = document.getElementById("fname").value.trim();
+      let lname = document.getElementById("lname").value.trim();
+      let email = document.getElementById("email").value.trim();
+      let password = document.getElementById("password").value.trim();
+      let age = document.getElementById("age").value.trim();
+      let genderEls = document.getElementsByName("gender");
+      let gender = "";
+      for (let g of genderEls) {
+        if (g.checked) gender = g.value;
+      }
+
+      let hobbies = Array.from(document.getElementById("hobby").selectedOptions).map(o => o.value).join(", ");
+
+      let errorMsg = document.getElementById("errorMsg");
+      errorMsg.innerHTML = "";
+
+      if (!fname || !lname || !email || !password || !age || !gender) {
+        errorMsg.innerHTML = "Заполните все обязательные поля!";
+        return;
+      }
+
+      let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,}$/;
+      if (!email.match(emailPattern)) {
+        errorMsg.innerHTML = "Введите корректный email!";
+        return;
+      }
+
+      let data = 
+`Имя: ${fname}
+Фамилия: ${lname}
+Пол: ${gender}
+Email: ${email}
+Пароль: ${password}
+Возраст: ${age}
+Увлечения: ${hobbies}`;
+
+      let blob = new Blob([data], {type: "text/plain"});
+      let link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "form-data.txt";
+      link.click();
+    }
+  </script>
+</body>
+</html>

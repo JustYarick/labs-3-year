@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>ЛР10. Валидация и приветствие</title>
+  <script>
+    function askUser() {
+      let name, patronymic;
+
+      while (true) {
+        name = prompt("Введите имя:");
+        if (name === null) {
+          return;
+        }
+        name = name.trim();
+        if (name !== "") break;
+        alert("Имя не может быть пустым. Попробуйте ещё раз.");
+      }
+
+      while (true) {
+        patronymic = prompt("Введите отчество:");
+        if (patronymic === null) {
+          return;
+        }
+        patronymic = patronymic.trim();
+        if (patronymic !== "") break;
+        alert("Отчество не может быть пустым. Попробуйте ещё раз.");
+      }
+
+      alert("Hello, " + name + " " + patronymic + 
+            ", Welcome to web page, it’s a great site WWW!");
+    }
+  </script>
+</head>
+<body onload="askUser()">
+
+  <h1 align="center">Лабораторная работа №10</h1>
+  <p align="center">Перезагрузите страницу, чтобы пройти валидацию ещё раз.</p>
+
+</body>
+</html>
