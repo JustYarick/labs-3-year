@@ -1,0 +1,29 @@
+# ─── C# / .NET ───────────────────────────────────
+bin/
+obj/
+*.user
+*.suo
+*.vs/
+.vs/
+*.csproj.user
+TestResults/
+*.nupkg
+*.snupkg
+
+# ─── Python ──────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+
+# ─── Общее ───────────────────────────────────────
+.env
+.DS_Store
+Thumbs.db
